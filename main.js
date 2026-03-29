@@ -73,15 +73,15 @@ const THEMES = {
     aurora: [.878, .722, .251], particle: [224, 184, 64], label: '👑 Gold Prestige'
   },
   obsidian: {
-    '--a1': '#040404', '--a2': '#080808', '--a3': '#0c0c12',
-    '--acc': '#a090c8', '--acc-lt': '#c8b8e8', '--acc-dk': '#706090',
-    '--acc-g': 'rgba(160,144,200,0.09)', '--acc-gm': 'rgba(160,144,200,0.16)', '--acc-gl': 'rgba(160,144,200,0.28)',
-    '--ink': '#e8e8f0', '--ink2': '#888898', '--ink3': '#404050',
-    '--ln': 'rgba(255,255,255,0.05)', '--ln2': 'rgba(255,255,255,0.08)',
-    '--card': 'rgba(12,12,18,0.85)', '--card2': 'rgba(18,18,28,0.75)', '--nav': 'rgba(4,4,8,0.97)',
-    '--up': '#60b890', '--up2': 'rgba(96,184,144,0.10)', '--dn': '#b87880', '--dn2': 'rgba(184,120,128,0.10)',
-    '--r': '160', '--g': '144', '--b': '200',
-    aurora: [.627, .565, .784], particle: [160, 144, 200], label: '🖤 Obsidian'
+    '--a1': '#060608', '--a2': '#0a0a0e', '--a3': '#0e0e14',
+    '--acc': '#9890b8', '--acc-lt': '#c0b8d8', '--acc-dk': '#605878',
+    '--acc-g': 'rgba(152,144,184,0.08)', '--acc-gm': 'rgba(152,144,184,0.14)', '--acc-gl': 'rgba(152,144,184,0.24)',
+    '--ink': '#e4e4ec', '--ink2': '#7878888', '--ink3': '#3a3a48',
+    '--ln': 'rgba(255,255,255,0.06)', '--ln2': 'rgba(255,255,255,0.10)',
+    '--card': 'rgba(14,14,20,0.88)', '--card2': 'rgba(20,20,30,0.78)', '--nav': 'rgba(6,6,10,0.98)',
+    '--up': '#58b888', '--up2': 'rgba(88,184,136,0.10)', '--dn': '#b87880', '--dn2': 'rgba(184,120,128,0.10)',
+    '--r': '152', '--g': '144', '--b': '184',
+    aurora: [.46, .42, .56], particle: [152, 144, 184], label: '🖤 Obsidian'
   }
 };
 
@@ -97,6 +97,8 @@ window.setTheme = function (name, btn) {
   if (window.auroraSetColor) window.auroraSetColor(...t.aurora);
   if (window.particleSetColor) window.particleSetColor(...t.particle);
   document.getElementById('bg-root').style.background = `linear-gradient(180deg,${t['--a1']} 0%,${t['--a2']} 50%,${t['--a3']} 100%)`;
+  document.body.className = document.body.className.replace(/\btheme-\S+/g, '').trim();
+  document.body.classList.add('theme-' + name);
   document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   setTimeout(() => document.body.classList.remove('theme-transition'), 1400);

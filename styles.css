@@ -472,6 +472,11 @@ html,body{height:100%;overflow:hidden;font-family:'Poppins',sans-serif;font-weig
 .toast.show{opacity:1}
 .theme-transition *{transition:background 1.2s ease,border-color 1.2s ease,color .8s ease !important}
 
+/* === OBSIDIAN SOFT ROUND TREATMENT === */
+body.theme-obsidian .card{border-radius:28px}
+body.theme-obsidian .modal{border-radius:32px 32px 0 0}
+body.theme-obsidian .nb{border-radius:18px}
+
 /* ============================================================
    CURRENCY SWITCHER
    ============================================================ */
