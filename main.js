@@ -230,7 +230,7 @@ window.renderTxList = function () {
   let rc = 0;
   Object.entries(groups).forEach(([date, txs]) => {
     const total = txs.reduce((s, t) => s + t.amt, 0);
-    list.innerHTML += `<div class="tx-lbl"><span>${date}</span><span style="color:${total >= 0 ? 'var(--up)' : 'var(--dn)'}">${total >= 0 ? '+' : ''}€${Math.abs(total).toFixed(2)}</span></div>`;
+    list.innerHTML += `<div class="tx-lbl"><span>${date}</span><span style="color:${total >= 0 ? 'var(--up)' : 'var(--dn)'}">${total >= 0 ? '+' : ''}${fmtAmt(total)}</span></div>`;
     const g = document.createElement('div');
     g.className = 'card';
     g.style.cssText = 'padding:4px 14px;margin:0 0 4px';
@@ -245,13 +245,15 @@ window.renderTxList = function () {
 function simTx(tx) {
   const c = tx.amt >= 0 ? 'var(--up)' : 'var(--dn)';
   const s = tx.amt >= 0 ? '+' : '−';
-  return `<div class="tx"><div class="tx-ico" style="${tx.cat === 'income' ? 'background:var(--up2)' : ''}">${tx.ico}</div><div class="tx-info"><div class="tx-name">${tx.name}</div><div class="tx-cat">${tx.cat}</div></div><div class="tx-amt" style="color:${c}">${s}€${Math.abs(tx.amt).toFixed(2)}</div></div>`;
+  const amt = fmtAmt(tx.amt);
+  return `<div class="tx"><div class="tx-ico" style="${tx.cat === 'income' ? 'background:var(--up2)' : ''}">${tx.ico}</div><div class="tx-info"><div class="tx-name">${tx.name}</div><div class="tx-cat">${tx.cat}</div></div><div class="tx-amt" style="color:${c}">${s}${amt}</div></div>`;
 }
 
 function swipeTx(tx) {
   const c = tx.amt >= 0 ? 'var(--up)' : 'var(--dn)';
   const s = tx.amt >= 0 ? '+' : '−';
-  return `<div class="tx-wrap" data-id="${tx.id}"><div class="tx-actions"><div class="tx-act dup" onclick="dupTx(${tx.id})"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></div><div class="tx-act del" onclick="delTx(${tx.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div></div><div class="tx" ontouchstart="swipeStart(event,this)" ontouchmove="swipeMove(event,this)" ontouchend="swipeEnd(event,this)"><div class="tx-ico" style="${tx.cat === 'income' ? 'background:var(--up2)' : ''}">${tx.ico}</div><div class="tx-info"><div class="tx-name">${tx.name}</div><div class="tx-cat">${tx.cat}</div></div><div class="tx-amt" style="color:${c}">${s}€${Math.abs(tx.amt).toFixed(2)}</div></div></div>`;
+  const amt = fmtAmt(tx.amt);
+  return `<div class="tx-wrap" data-id="${tx.id}"><div class="tx-actions"><div class="tx-act dup" onclick="dupTx(${tx.id})"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></div><div class="tx-act del" onclick="delTx(${tx.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div></div><div class="tx" ontouchstart="swipeStart(event,this)" ontouchmove="swipeMove(event,this)" ontouchend="swipeEnd(event,this)"><div class="tx-ico" style="${tx.cat === 'income' ? 'background:var(--up2)' : ''}">${tx.ico}</div><div class="tx-info"><div class="tx-name">${tx.name}</div><div class="tx-cat">${tx.cat}</div></div><div class="tx-amt" style="color:${c}">${s}${amt}</div></div></div>`;
 }
 
 let swX = 0;
@@ -642,6 +644,41 @@ window.wrPrev = function () {
 };
 
 function goWrapped(idx) { wrCurrent = idx; renderWrappedSlide(idx); }
+
+/* ── CURRENCY SWITCHER ───────────────────────────────────── */
+const CURRENCIES = {
+  EUR: { symbol: '€', rate: 1.00,   decimals: 2 },
+  USD: { symbol: '$', rate: 1.08,   decimals: 2 },
+  GBP: { symbol: '£', rate: 0.85,   decimals: 2 },
+  CHF: { symbol: '₣', rate: 0.97,   decimals: 2 },
+  JPY: { symbol: '¥', rate: 161.5,  decimals: 0 },
+};
+
+let activeCurrency = 'EUR';
+
+function fmtAmt(eurAmt) {
+  const cur = CURRENCIES[activeCurrency];
+  const converted = Math.abs(eurAmt) * cur.rate;
+  return cur.symbol + converted.toFixed(cur.decimals);
+}
+
+window.setCurrency = function (code) {
+  if (code === activeCurrency) return;
+  haptic(8);
+  activeCurrency = code;
+  // Update pills
+  document.querySelectorAll('.cy-pill').forEach(p => p.classList.remove('on'));
+  document.getElementById('cy-' + code).classList.add('on');
+  // Update hero symbol
+  document.getElementById('heroSymbol').textContent = CURRENCIES[code].symbol;
+  // Update hero balance (base EUR value is 2847.50)
+  const cur = CURRENCIES[code];
+  const converted = (2847.50 * cur.rate).toFixed(cur.decimals);
+  buildSlotDisplay(Number(converted).toLocaleString('en-US', { minimumFractionDigits: cur.decimals, maximumFractionDigits: cur.decimals }));
+  // Re-render transactions
+  renderTxList();
+  showToast(CURRENCIES[code].symbol + ' ' + code);
+};
 
 /* ── INIT ────────────────────────────────────────────────── */
 buildSlotDisplay('2,847.50');

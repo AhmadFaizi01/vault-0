@@ -471,6 +471,14 @@ html,body{height:100%;overflow:hidden;font-family:'Poppins',sans-serif;font-weig
 .theme-transition *{transition:background 1.2s ease,border-color 1.2s ease,color .8s ease !important}
 
 /* ============================================================
+   CURRENCY SWITCHER
+   ============================================================ */
+.currency-bar{display:flex;gap:5px;padding:0 26px 12px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.currency-bar::-webkit-scrollbar{display:none}
+.cy-pill{padding:4px 12px;border-radius:99px;font-size:9px;color:var(--ink3);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .22s;border:1px solid transparent;font-family:'Poppins',sans-serif;font-weight:400}
+.cy-pill.on{background:var(--acc-g);color:var(--acc);border-color:var(--acc-gm)}
+
+/* ============================================================
    ONBOARDING
    ============================================================ */
 #onboarding{position:fixed;inset:0;z-index:999;background:var(--a1);display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;overflow:hidden}

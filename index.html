@@ -27,8 +27,15 @@
     <div class="screen active" id="s-pulse">
       <div class="hero">
         <div class="hero-ey">Net Balance · March 2025</div>
-        <div class="hero-num"><sup>€</sup><span id="slotDisplay"></span></div>
-        <div class="hero-pill"><div style="width:5px;height:5px;border-radius:50%;background:var(--up)"></div>€312 ahead of February</div>
+        <div class="hero-num"><sup id="heroSymbol">€</sup><span id="slotDisplay"></span></div>
+        <div class="hero-pill"><div style="width:5px;height:5px;border-radius:50%;background:var(--up)"></div><span id="heroPill">€312 ahead of February</span></div>
+      </div>
+      <div class="currency-bar">
+        <div class="cy-pill on" id="cy-EUR" onclick="setCurrency('EUR')">€ EUR</div>
+        <div class="cy-pill" id="cy-USD" onclick="setCurrency('USD')">$ USD</div>
+        <div class="cy-pill" id="cy-GBP" onclick="setCurrency('GBP')">£ GBP</div>
+        <div class="cy-pill" id="cy-CHF" onclick="setCurrency('CHF')">₣ CHF</div>
+        <div class="cy-pill" id="cy-JPY" onclick="setCurrency('JPY')">¥ JPY</div>
       </div>
       <div class="theme-bar">
         <span class="theme-lbl">Mood</span>
