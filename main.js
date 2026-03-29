@@ -806,3 +806,139 @@ setTimeout(() => showAch('saving'), 2400);
     buildDots();
   }
 })();
+
+/* ── CSV IMPORT ──────────────────────────────────────────── */
+(function () {
+  let parsedRows = [];
+  let parsedHeaders = [];
+
+  // ── Open / Close ──
+  window.openCsvImport = function () {
+    haptic(8);
+    document.getElementById('csvImport').style.display = 'flex';
+    document.getElementById('csvPreview').style.display = 'none';
+    document.getElementById('csvDrop').style.display = 'flex';
+    document.getElementById('csvFileInput').value = '';
+    parsedRows = [];
+    parsedHeaders = [];
+  };
+
+  window.closeCsvImport = function () {
+    document.getElementById('csvImport').style.display = 'none';
+  };
+
+  // ── Drag & Drop ──
+  const drop = document.getElementById('csvDrop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    drop.classList.remove('over');
+    const file = e.dataTransfer.files[0];
+    if (file) handleCsvFile(file);
+  });
+
+  // ── Parse CSV (handles quoted fields) ──
+  function parseCsv(text) {
+    const lines = text.trim().split(/\r?\n/);
+    return lines.map(line => {
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      cols.push(cur.trim());
+      return cols;
+    });
+  }
+
+  // ── Detect columns by header names ──
+  function detectColumns(headers) {
+    const h = headers.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+    const find = (keywords) => h.findIndex(col => keywords.some(k => col.includes(k)));
+    return {
+      nameIdx:  find(['description', 'name', 'payee', 'merchant', 'details', 'narrative']),
+      amtIdx:   find(['amount', 'value', 'amounteur', 'debit', 'credit', 'sum']),
+      dateIdx:  find(['date', 'completeddate', 'valuedate', 'bookingdate', 'time']),
+    };
+  }
+
+  // ── Populate column selector dropdowns ──
+  function populateSelects(headers, detected) {
+    ['csvMapName', 'csvMapAmt', 'csvMapDate'].forEach(id => {
+      const sel = document.getElementById(id);
+      sel.innerHTML = headers.map((h, i) => `<option value="${i}">${h || 'Col ' + (i+1)}</option>`).join('');
+    });
+    if (detected.nameIdx >= 0)  document.getElementById('csvMapName').value = detected.nameIdx;
+    if (detected.amtIdx  >= 0)  document.getElementById('csvMapAmt').value  = detected.amtIdx;
+    if (detected.dateIdx >= 0)  document.getElementById('csvMapDate').value  = detected.dateIdx;
+  }
+
+  // ── Render preview table (first 12 data rows) ──
+  function renderPreview(headers, rows) {
+    const preview = rows.slice(0, 12);
+    const table = document.getElementById('csvTable');
+    table.innerHTML =
+      '<thead><tr>' + headers.map(h => `<th>${h || '—'}</th>`).join('') + '</tr></thead>' +
+      '<tbody>' + preview.map((row, ri) =>
+        `<tr class="${ri < 3 ? 'highlight' : ''}">${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`
+      ).join('') + '</tbody>';
+  }
+
+  // ── Handle file read ──
+  window.handleCsvFile = function (file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const all = parseCsv(e.target.result);
+      if (all.length < 2) { showToast('CSV appears empty'); return; }
+      parsedHeaders = all[0];
+      parsedRows = all.slice(1).filter(r => r.some(c => c));
+      const detected = detectColumns(parsedHeaders);
+      populateSelects(parsedHeaders, detected);
+      renderPreview(parsedHeaders, parsedRows);
+      document.getElementById('csvDrop').style.display = 'none';
+      document.getElementById('csvPreview').style.display = 'flex';
+      document.getElementById('csvPreview').style.flexDirection = 'column';
+      const count = Math.min(parsedRows.length, 500);
+      document.getElementById('csvConfirmBtn').textContent = `Import ${count} transaction${count !== 1 ? 's' : ''}`;
+    };
+    reader.readAsText(file);
+  };
+
+  // ── Confirm import ──
+  window.confirmCsvImport = function () {
+    const nameIdx = parseInt(document.getElementById('csvMapName').value);
+    const amtIdx  = parseInt(document.getElementById('csvMapAmt').value);
+    const dateIdx = parseInt(document.getElementById('csvMapDate').value);
+
+    const catGuess = (name) => {
+      const n = name.toLowerCase();
+      if (/uber|bolt|taxi|transport|train|bus|tfl/.test(n)) return { cat: 'uber', ico: '🚗' };
+      if (/spotify|netflix|apple|amazon|subscription|sub/.test(n)) return { cat: 'subs', ico: '📱' };
+      if (/lidl|aldi|tesco|sainsbury|grocery|supermarket/.test(n)) return { cat: 'groceries', ico: '🛒' };
+      if (/restaurant|cafe|coffee|food|deliveroo|just eat|pizza/.test(n)) return { cat: 'food', ico: '🍕' };
+      if (/rent|landlord|housing/.test(n)) return { cat: 'rent', ico: '🏠' };
+      if (/salary|payroll|income|wage/.test(n)) return { cat: 'income', ico: '💰' };
+      if (/pharmacy|doctor|health|gym/.test(n)) return { cat: 'health', ico: '💊' };
+      return { cat: 'other', ico: '📦' };
+    };
+
+    const imported = parsedRows.slice(0, 500).map(row => {
+      const name = row[nameIdx] || 'Unknown';
+      const rawAmt = parseFloat((row[amtIdx] || '0').replace(/[^0-9.\-]/g, '')) || 0;
+      const date = row[dateIdx] || 'Imported';
+      const { cat, ico } = catGuess(name);
+      return { id: Date.now() + Math.random(), name, cat, ico, amt: rawAmt, date };
+    }).filter(tx => tx.amt !== 0);
+
+    STORE.transactions.unshift(...imported);
+    renderTxList();
+    closeCsvImport();
+    haptic(20);
+    showToast(`${imported.length} transactions imported`);
+  };
+})();

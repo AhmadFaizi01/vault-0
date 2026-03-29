@@ -118,7 +118,10 @@
     <div class="screen" id="s-ledger">
       <div class="pg">
         <div class="pg-t">Ledger</div>
-        <button class="fab-s" onclick="haptic(8);openModal()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="csv-btn" onclick="openCsvImport()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import</button>
+          <button class="fab-s" onclick="haptic(8);openModal()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
       </div>
       <div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="srch-t">Search transactions…</span></div>
       <div class="scroll" style="padding:0 16px"><div id="txList"></div><div style="height:20px"></div></div>
@@ -299,6 +302,46 @@
 <script type="module" src="js/aurora.js"></script>
 <script type="module" src="js/particles.js"></script>
 <script type="module" src="js/main.js"></script>
+
+<!-- CSV IMPORT -->
+<div class="csv-overlay" id="csvImport" style="display:none">
+  <div class="csv-sheet">
+    <div class="csv-hdr">
+      <div class="csv-title">Import CSV</div>
+      <button class="csv-close" onclick="closeCsvImport()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+
+    <!-- Drop zone -->
+    <div class="csv-drop" id="csvDrop">
+      <div class="csv-drop-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="csv-drop-t">Drop your CSV here</div>
+      <div class="csv-drop-s">Revolut · Monzo · N26 · Generic</div>
+      <label class="csv-pick-btn">Choose file<input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCsvFile(this.files[0])"/></label>
+    </div>
+
+    <!-- Preview (hidden until file loaded) -->
+    <div id="csvPreview" style="display:none">
+      <div class="csv-map-row">
+        <div class="csv-map-item">
+          <div class="csv-map-lbl">Name column</div>
+          <select class="csv-map-sel" id="csvMapName"></select>
+        </div>
+        <div class="csv-map-item">
+          <div class="csv-map-lbl">Amount column</div>
+          <select class="csv-map-sel" id="csvMapAmt"></select>
+        </div>
+        <div class="csv-map-item">
+          <div class="csv-map-lbl">Date column</div>
+          <select class="csv-map-sel" id="csvMapDate"></select>
+        </div>
+      </div>
+      <div class="csv-table-wrap">
+        <table class="csv-table" id="csvTable"></table>
+      </div>
+      <button class="csv-confirm-btn" id="csvConfirmBtn" onclick="confirmCsvImport()">Import</button>
+    </div>
+  </div>
+</div>
 
 <!-- ONBOARDING -->
 <div id="onboarding">
