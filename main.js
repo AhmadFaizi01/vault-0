@@ -162,8 +162,12 @@ window.updateNavPill = function (idx) {
 };
 
 /* ── NAVIGATION ──────────────────────────────────────────── */
+const TAB_ORDER = ['pulse', 'ledger', 'vault', 'aura'];
+let currentTabIdx = 0;
+
 window.nav = function (page, idx) {
   haptic(8);
+  currentTabIdx = idx;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
   document.getElementById('s-' + page).classList.add('active');
@@ -679,6 +683,38 @@ window.setCurrency = function (code) {
   renderTxList();
   showToast(CURRENCIES[code].symbol + ' ' + code);
 };
+
+/* ── TAB SWIPE ───────────────────────────────────────────── */
+(function () {
+  let tsX = 0, tsY = 0, isHorizontal = null;
+
+  const screensEl = document.querySelector('.screens');
+
+  screensEl.addEventListener('touchstart', function (e) {
+    tsX = e.touches[0].clientX;
+    tsY = e.touches[0].clientY;
+    isHorizontal = null;
+  }, { passive: true });
+
+  screensEl.addEventListener('touchmove', function (e) {
+    if (isHorizontal !== null) return;
+    const dx = Math.abs(e.touches[0].clientX - tsX);
+    const dy = Math.abs(e.touches[0].clientY - tsY);
+    if (dx < 8 && dy < 8) return; // not enough movement yet
+    isHorizontal = dx > dy;
+    if (isHorizontal) e.preventDefault(); // block scroll only for horizontal
+  }, { passive: false });
+
+  screensEl.addEventListener('touchend', function (e) {
+    if (!isHorizontal) return;
+    const dx = e.changedTouches[0].clientX - tsX;
+    if (Math.abs(dx) < 50) return; // too short
+    const next = dx < 0
+      ? Math.min(currentTabIdx + 1, TAB_ORDER.length - 1) // swipe left → next
+      : Math.max(currentTabIdx - 1, 0);                    // swipe right → prev
+    if (next !== currentTabIdx) nav(TAB_ORDER[next], next);
+  }, { passive: true });
+})();
 
 /* ── INIT ────────────────────────────────────────────────── */
 buildSlotDisplay('2,847.50');
