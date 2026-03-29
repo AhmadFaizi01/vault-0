@@ -92,6 +92,17 @@ html,body{height:100%;overflow:hidden;font-family:'Poppins',sans-serif;font-weig
 #th-abyss{background:linear-gradient(135deg,#000d1a,#006680)}
 #th-gold{background:linear-gradient(135deg,#1a1400,#c09020)}
 #th-obsidian{background:linear-gradient(135deg,#0a0a0a,#303040)}
+#th-cream{background:linear-gradient(135deg,#f5efe6,#c8c0e8)}
+
+/* === LIGHT CREAM THEME OVERRIDES === */
+body.theme-cream #aurora-canvas{opacity:.06}
+body.theme-cream #particle-canvas{opacity:.08}
+body.theme-cream #vignette{opacity:.08}
+body.theme-cream #grain{opacity:.018}
+body.theme-cream .card{box-shadow:0 2px 16px rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.08)}
+body.theme-cream .nav{box-shadow:0 -1px 0 rgba(0,0,0,0.06)}
+body.theme-cream .hero::before{opacity:.3}
+body.theme-cream #p1,body.theme-cream #p2,body.theme-cream #p3{opacity:.05}
 .months{display:flex;gap:5px;padding:0 26px 12px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .months::-webkit-scrollbar{display:none}
 .mo{padding:4px 12px;border-radius:99px;font-size:9px;color:var(--ink3);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .22s;border:1px solid transparent;font-family:'Poppins',sans-serif}
