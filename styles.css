@@ -93,6 +93,18 @@ html,body{height:100%;overflow:hidden;font-family:'Poppins',sans-serif;font-weig
 #th-gold{background:linear-gradient(135deg,#1a1400,#c09020)}
 #th-obsidian{background:linear-gradient(135deg,#0a0a0a,#303040)}
 #th-cream{background:linear-gradient(135deg,#f5efe6,#c8c0e8)}
+#th-hc{background:linear-gradient(135deg,#000000,#003320);border:1.5px solid #00ff88}
+
+/* === HIGH CONTRAST THEME OVERRIDES === */
+body.theme-hc #aurora-canvas{opacity:0}
+body.theme-hc #particle-canvas{opacity:0}
+body.theme-hc #vignette{opacity:0}
+body.theme-hc #grain{opacity:0}
+body.theme-hc #p1,body.theme-hc #p2,body.theme-hc #p3{opacity:0}
+body.theme-hc .card{backdrop-filter:none;-webkit-backdrop-filter:none;border-width:1.5px}
+body.theme-hc .nav{backdrop-filter:none;-webkit-backdrop-filter:none;border-top-width:1.5px}
+body.theme-hc .modal{backdrop-filter:none;-webkit-backdrop-filter:none}
+body.theme-hc .hero::before{opacity:0}
 
 /* === LIGHT CREAM THEME OVERRIDES === */
 body.theme-cream #aurora-canvas{opacity:.06}
