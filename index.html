@@ -37,17 +37,13 @@
         <div class="cy-pill" id="cy-CHF" onclick="setCurrency('CHF')">₣ CHF</div>
         <div class="cy-pill" id="cy-JPY" onclick="setCurrency('JPY')">¥ JPY</div>
       </div>
-      <div class="theme-bar">
+      <div class="theme-trigger-bar">
         <span class="theme-lbl">Mood</span>
-        <div class="th-btn active" id="th-midnight" onclick="setTheme('midnight',this)"></div>
-        <div class="th-btn" id="th-ember" onclick="setTheme('ember',this)"></div>
-        <div class="th-btn" id="th-forest" onclick="setTheme('forest',this)"></div>
-        <div class="th-btn" id="th-dusk" onclick="setTheme('dusk',this)"></div>
-        <div class="th-btn" id="th-abyss" onclick="setTheme('abyss',this)"></div>
-        <div class="th-btn" id="th-gold" onclick="setTheme('gold',this)"></div>
-        <div class="th-btn" id="th-obsidian" onclick="setTheme('obsidian',this)"></div>
-        <div class="th-btn" id="th-cream" onclick="setTheme('cream',this)"></div>
-        <div class="th-btn" id="th-hc" onclick="setTheme('hc',this)"></div>
+        <div class="theme-trigger" id="themeTrigger" onclick="openThemePicker()">
+          <div class="tt-swatch" id="ttSwatch"></div>
+          <span class="tt-name" id="ttName">Midnight</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
       </div>
       <div class="months" id="mpills"></div>
       <div class="wrapped-banner" onclick="openWrapped()">
@@ -304,6 +300,17 @@
 <script type="module" src="js/aurora.js"></script>
 <script type="module" src="js/particles.js"></script>
 <script type="module" src="js/main.js"></script>
+
+<!-- THEME PICKER -->
+<div class="tp-overlay" id="themePicker" style="display:none" onclick="if(event.target===this)closeThemePicker()">
+  <div class="tp-sheet">
+    <div class="tp-hdr">
+      <div class="tp-title">Choose Mood</div>
+      <button class="tp-close" onclick="closeThemePicker()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="tp-list" id="tpList"></div>
+  </div>
+</div>
 
 <!-- CSV IMPORT -->
 <div class="csv-overlay" id="csvImport" style="display:none">

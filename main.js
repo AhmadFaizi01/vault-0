@@ -15,7 +15,7 @@ const THEMES = {
     '--card': 'rgba(8,5,32,0.82)', '--card2': 'rgba(14,10,50,0.72)', '--nav': 'rgba(2,1,20,0.97)',
     '--up': '#5abfa0', '--up2': 'rgba(90,191,160,0.10)', '--dn': '#c87880', '--dn2': 'rgba(200,120,128,0.10)',
     '--r': '124', '--g': '92', '--b': '232',
-    aurora: [.38, .28, .95], particle: [124, 92, 232], label: '🌌 Midnight'
+    aurora: [.38, .28, .95], particle: [124, 92, 232], label: '🌌 Midnight', xpRequired: 0, swatch: 'linear-gradient(135deg,#1a0f4a,#5832dc)'
   },
   ember: {
     '--a1': '#080400', '--a2': '#0f0700', '--a3': '#160b00',
@@ -26,7 +26,7 @@ const THEMES = {
     '--card': 'rgba(20,10,2,0.85)', '--card2': 'rgba(30,14,4,0.75)', '--nav': 'rgba(6,3,0,0.97)',
     '--up': '#78b890', '--up2': 'rgba(120,184,144,0.10)', '--dn': '#c07070', '--dn2': 'rgba(192,112,112,0.10)',
     '--r': '176', '--g': '94', '--b': '40',
-    aurora: [.62, .28, .06], particle: [176, 94, 40], label: '🔥 Ember'
+    aurora: [.62, .28, .06], particle: [176, 94, 40], label: '🔥 Ember', xpRequired: 100, swatch: 'linear-gradient(135deg,#200800,#d4500a)'
   },
   forest: {
     '--a1': '#010801', '--a2': '#020d03', '--a3': '#031405',
@@ -37,7 +37,7 @@ const THEMES = {
     '--card': 'rgba(2,10,3,0.88)', '--card2': 'rgba(4,16,6,0.78)', '--nav': 'rgba(1,6,1,0.97)',
     '--up': '#2dd4a0', '--up2': 'rgba(45,212,160,0.10)', '--dn': '#c07878', '--dn2': 'rgba(192,120,120,0.10)',
     '--r': '45', '--g': '212', '--b': '160',
-    aurora: [.10, .60, .36], particle: [45, 212, 160], label: '🌿 Forest'
+    aurora: [.10, .60, .36], particle: [45, 212, 160], label: '🌿 Forest', xpRequired: 200, swatch: 'linear-gradient(135deg,#021408,#1a6e3c)'
   },
   dusk: {
     '--a1': '#0c0408', '--a2': '#14060f', '--a3': '#1e0a18',
@@ -48,7 +48,7 @@ const THEMES = {
     '--card': 'rgba(22,4,16,0.86)', '--card2': 'rgba(32,8,24,0.76)', '--nav': 'rgba(10,2,8,0.97)',
     '--up': '#78b898', '--up2': 'rgba(120,184,152,0.10)', '--dn': '#e07080', '--dn2': 'rgba(224,112,128,0.10)',
     '--r': '224', '--g': '104', '--b': '152',
-    aurora: [.72, .22, .46], particle: [224, 104, 152], label: '🌸 Dusk'
+    aurora: [.72, .22, .46], particle: [224, 104, 152], label: '🌸 Dusk', xpRequired: 300, swatch: 'linear-gradient(135deg,#1a0820,#e06898)'
   },
   abyss: {
     '--a1': '#000810', '--a2': '#000d1e', '--a3': '#00142e',
@@ -59,7 +59,7 @@ const THEMES = {
     '--card': 'rgba(0,10,24,0.90)', '--card2': 'rgba(0,16,36,0.80)', '--nav': 'rgba(0,5,14,0.98)',
     '--up': '#00d4a8', '--up2': 'rgba(0,212,168,0.10)', '--dn': '#e06070', '--dn2': 'rgba(224,96,112,0.10)',
     '--r': '0', '--g': '200', '--b': '240',
-    aurora: [.00, .52, .78], particle: [0, 200, 240], label: '🌊 Abyss'
+    aurora: [.00, .52, .78], particle: [0, 200, 240], label: '🌊 Abyss', xpRequired: 400, swatch: 'linear-gradient(135deg,#000d1a,#00c8f0)'
   },
   gold: {
     '--a1': '#0a0800', '--a2': '#120f00', '--a3': '#1a1500',
@@ -70,7 +70,7 @@ const THEMES = {
     '--card': 'rgba(20,16,0,0.80)', '--card2': 'rgba(30,24,0,0.70)', '--nav': 'rgba(10,8,0,0.96)',
     '--up': '#60c080', '--up2': 'rgba(96,192,128,0.10)', '--dn': '#c07878', '--dn2': 'rgba(192,120,120,0.10)',
     '--r': '224', '--g': '184', '--b': '64',
-    aurora: [.878, .722, .251], particle: [224, 184, 64], label: '👑 Gold Prestige'
+    aurora: [.878, .722, .251], particle: [224, 184, 64], label: '👑 Gold Prestige', xpRequired: 500, swatch: 'linear-gradient(135deg,#1a1400,#c09020)'
   },
   obsidian: {
     '--a1': '#060608', '--a2': '#0a0a0e', '--a3': '#0e0e14',
@@ -81,7 +81,7 @@ const THEMES = {
     '--card': 'rgba(14,14,20,0.88)', '--card2': 'rgba(20,20,30,0.78)', '--nav': 'rgba(6,6,10,0.98)',
     '--up': '#58b888', '--up2': 'rgba(88,184,136,0.10)', '--dn': '#b87880', '--dn2': 'rgba(184,120,128,0.10)',
     '--r': '152', '--g': '144', '--b': '184',
-    aurora: [.46, .42, .56], particle: [152, 144, 184], label: '🖤 Obsidian'
+    aurora: [.46, .42, .56], particle: [152, 144, 184], label: '🖤 Obsidian', xpRequired: 600, swatch: 'linear-gradient(135deg,#0a0a0a,#303048)'
   },
   cream: {
     '--a1': '#faf6f0', '--a2': '#f5efe6', '--a3': '#efe8dc',
@@ -92,7 +92,7 @@ const THEMES = {
     '--card': 'rgba(255,252,248,0.96)', '--card2': 'rgba(250,246,240,0.92)', '--nav': 'rgba(250,246,240,0.97)',
     '--up': '#1a9e6a', '--up2': 'rgba(26,158,106,0.10)', '--dn': '#d04858', '--dn2': 'rgba(208,72,88,0.10)',
     '--r': '88', '--g': '72', '--b': '200',
-    aurora: [.20, .18, .50], particle: [88, 72, 200], label: '☀️ Light Cream'
+    aurora: [.20, .18, .50], particle: [88, 72, 200], label: '☀️ Light Cream', xpRequired: 800, swatch: 'linear-gradient(135deg,#f5efe6,#c8c0e8)'
   },
   hc: {
     '--a1': '#000000', '--a2': '#000000', '--a3': '#000000',
@@ -103,7 +103,7 @@ const THEMES = {
     '--card': 'rgba(18,18,18,1.00)', '--card2': 'rgba(24,24,24,1.00)', '--nav': 'rgba(0,0,0,1.00)',
     '--up': '#00ff88', '--up2': 'rgba(0,255,136,0.12)', '--dn': '#ff4466', '--dn2': 'rgba(255,68,102,0.12)',
     '--r': '0', '--g': '255', '--b': '136',
-    aurora: [.00, .00, .00], particle: [0, 255, 136], label: '⚡ High Contrast'
+    aurora: [.00, .00, .00], particle: [0, 255, 136], label: '⚡ High Contrast', xpRequired: 1000, swatch: 'linear-gradient(135deg,#000000,#003320)'
   }
 };
 
@@ -123,6 +123,11 @@ window.setTheme = function (name, btn) {
   document.body.classList.add('theme-' + name);
   document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  // Update trigger button
+  const ttSwatch = document.getElementById('ttSwatch');
+  const ttName = document.getElementById('ttName');
+  if (ttSwatch) ttSwatch.style.background = t.swatch;
+  if (ttName) ttName.textContent = t.label.replace(/^\S+\s/, '');
   setTimeout(() => document.body.classList.remove('theme-transition'), 1400);
   showToast(t.label);
   if (document.getElementById('ap-forecast').style.display !== 'none') setTimeout(drawForecast, 100);
@@ -1024,4 +1029,53 @@ setTimeout(() => showAch('saving'), 2400);
     haptic(20);
     showToast(`${imported.length} transactions imported`);
   };
+})();
+
+/* ── THEME PICKER ────────────────────────────────────────── */
+(function () {
+  const USER_XP = 680;
+
+  function buildList() {
+    const list = document.getElementById('tpList');
+    list.innerHTML = '';
+    Object.entries(THEMES).forEach(([key, t]) => {
+      const locked = t.xpRequired > USER_XP;
+      const active = key === currentTheme;
+      const row = document.createElement('div');
+      row.className = 'tp-row' + (active ? ' active' : '') + (locked ? ' locked' : '');
+      row.innerHTML = `
+        <div class="tp-swatch" style="background:${t.swatch}"></div>
+        <div class="tp-info">
+          <div class="tp-name">${t.label}</div>
+          ${locked ? `<div class="tp-xp">🔒 Unlock at ${t.xpRequired} xp</div>` : '<div class="tp-xp">Unlocked</div>'}
+        </div>
+        ${active ? '<div class="tp-check">✓</div>' : ''}
+        ${locked ? '<div class="tp-lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>' : ''}
+      `;
+      row.onclick = () => {
+        if (locked) { haptic(8); showToast(`Reach ${t.xpRequired} xp to unlock`); return; }
+        setTheme(key);
+        closeThemePicker();
+        buildList();
+      };
+      list.appendChild(row);
+    });
+  }
+
+  window.openThemePicker = function () {
+    haptic(8);
+    buildList();
+    document.getElementById('themePicker').style.display = 'flex';
+  };
+
+  window.closeThemePicker = function () {
+    document.getElementById('themePicker').style.display = 'none';
+  };
+
+  // Init trigger button on load
+  const t = THEMES[currentTheme];
+  const ttSwatch = document.getElementById('ttSwatch');
+  const ttName = document.getElementById('ttName');
+  if (ttSwatch) ttSwatch.style.background = t.swatch;
+  if (ttName) ttName.textContent = t.label.replace(/^\S+\s/, '');
 })();

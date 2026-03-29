@@ -501,6 +501,35 @@ body.theme-obsidian .modal{border-radius:32px 32px 0 0}
 body.theme-obsidian .nb{border-radius:18px}
 
 /* ============================================================
+   THEME PICKER
+   ============================================================ */
+.theme-trigger-bar{display:flex;align-items:center;gap:10px;padding:0 26px 12px;flex-shrink:0}
+.theme-trigger{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--ln2);border-radius:99px;padding:5px 12px 5px 6px;cursor:pointer;transition:border-color .22s;flex-shrink:0}
+.theme-trigger:active{opacity:.8}
+.theme-trigger svg{width:13px;height:13px;stroke:var(--ink3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tt-swatch{width:18px;height:18px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)}
+.tt-name{font-size:10px;font-weight:400;color:var(--ink2);font-family:'Poppins',sans-serif;white-space:nowrap}
+.tp-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);display:flex;align-items:flex-end}
+.tp-sheet{width:100%;max-width:430px;margin:0 auto;background:var(--a2);border-radius:24px 24px 0 0;border:1px solid var(--ln);border-bottom:none;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;animation:sheetup .32s cubic-bezier(.4,0,.2,1)}
+.tp-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px;flex-shrink:0;border-bottom:1px solid var(--ln)}
+.tp-title{font-family:'Cormorant',serif;font-size:22px;font-weight:300;color:var(--ink)}
+.tp-close{background:none;border:none;cursor:pointer;padding:4px;color:var(--ink3)}
+.tp-close svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.tp-list{overflow-y:auto;padding:8px 0 calc(env(safe-area-inset-bottom,0px)+8px);scrollbar-width:none}
+.tp-list::-webkit-scrollbar{display:none}
+.tp-row{display:flex;align-items:center;gap:14px;padding:12px 20px;cursor:pointer;transition:background .18s}
+.tp-row:active{background:var(--acc-g)}
+.tp-row.active{background:var(--acc-g)}
+.tp-row.locked{opacity:.5;cursor:default}
+.tp-swatch{width:36px;height:36px;border-radius:12px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.12)}
+.tp-info{flex:1;min-width:0}
+.tp-name{font-size:13px;font-weight:400;color:var(--ink);font-family:'Poppins',sans-serif;margin-bottom:2px}
+.tp-xp{font-size:10px;color:var(--ink3);font-family:'Poppins',sans-serif}
+.tp-row.active .tp-xp{color:var(--acc)}
+.tp-check{font-size:14px;color:var(--acc);font-weight:600}
+.tp-lock svg{width:16px;height:16px;stroke:var(--ink3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ============================================================
    CURRENCY SWITCHER
    ============================================================ */
 .currency-bar{display:flex;gap:5px;padding:0 26px 12px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
