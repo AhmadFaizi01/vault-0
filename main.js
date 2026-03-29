@@ -105,7 +105,11 @@ window.setTheme = function (name, btn) {
 };
 
 /* ── MONTHS ──────────────────────────────────────────────── */
-['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'].forEach((m, i) => {
+const MONTH_LABELS = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+const MONTH_KEYS   = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+let activeMonth = 'Mar';
+
+MONTH_LABELS.forEach((m, i) => {
   const el = document.createElement('div');
   el.className = 'mo' + (i === 5 ? ' on' : '');
   el.textContent = m + (i < 3 ? " '24" : " '25");
@@ -113,9 +117,17 @@ window.setTheme = function (name, btn) {
     document.querySelectorAll('.mo').forEach(x => x.classList.remove('on'));
     el.classList.add('on');
     haptic(8);
+    activeMonth = MONTH_KEYS[i];
+    filterByMonth(activeMonth);
   };
   document.getElementById('mpills').appendChild(el);
 });
+
+window.filterByMonth = function (month) {
+  const filtered = STORE.transactions.filter(tx => tx.date && tx.date.includes(month));
+  renderTxList(filtered.length > 0 ? filtered : STORE.transactions);
+  if (filtered.length === 0) showToast('No transactions for ' + month);
+};
 
 /* ── SLOT BALANCE ────────────────────────────────────────── */
 window.buildSlotDisplay = function (numStr) {
@@ -221,13 +233,18 @@ window.haptic = function (ms = 8) {
 };
 
 /* ── TRANSACTIONS ────────────────────────────────────────── */
-window.renderTxList = function () {
+window.renderTxList = function (txs = STORE.transactions) {
   const list = document.getElementById('txList');
   const recent = document.getElementById('recentTxList');
   list.innerHTML = '';
   recent.innerHTML = '';
+  if (txs.length === 0) {
+    const msg = STORE.transactions.length === 0 ? 'Tap + to add one or import a CSV' : 'No transactions match your search';
+    list.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px"><div style="font-size:36px">📭</div><div style="font-size:13px;font-weight:400;color:var(--ink);font-family:'Poppins',sans-serif">${STORE.transactions.length === 0 ? 'No transactions yet' : 'Nothing found'}</div><div style="font-size:11px;color:var(--ink3);font-family:'Poppins',sans-serif;text-align:center">${msg}</div></div>`;
+    return;
+  }
   const groups = {};
-  STORE.transactions.forEach(tx => {
+  txs.forEach(tx => {
     if (!groups[tx.date]) groups[tx.date] = [];
     groups[tx.date].push(tx);
   });
@@ -246,6 +263,15 @@ window.renderTxList = function () {
   });
 };
 
+window.searchTx = function (q) {
+  const query = q.toLowerCase().trim();
+  if (!query) { renderTxList(); return; }
+  const filtered = STORE.transactions.filter(tx =>
+    tx.name.toLowerCase().includes(query) || tx.cat.toLowerCase().includes(query)
+  );
+  renderTxList(filtered);
+};
+
 function simTx(tx) {
   const c = tx.amt >= 0 ? 'var(--up)' : 'var(--dn)';
   const s = tx.amt >= 0 ? '+' : '−';
@@ -257,7 +283,7 @@ function swipeTx(tx) {
   const c = tx.amt >= 0 ? 'var(--up)' : 'var(--dn)';
   const s = tx.amt >= 0 ? '+' : '−';
   const amt = fmtAmt(tx.amt);
-  return `<div class="tx-wrap" data-id="${tx.id}"><div class="tx-actions"><div class="tx-act dup" onclick="dupTx(${tx.id})"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></div><div class="tx-act del" onclick="delTx(${tx.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div></div><div class="tx" ontouchstart="swipeStart(event,this)" ontouchmove="swipeMove(event,this)" ontouchend="swipeEnd(event,this)"><div class="tx-ico" style="${tx.cat === 'income' ? 'background:var(--up2)' : ''}">${tx.ico}</div><div class="tx-info"><div class="tx-name">${tx.name}</div><div class="tx-cat">${tx.cat}</div></div><div class="tx-amt" style="color:${c}">${s}${amt}</div></div></div>`;
+  return `<div class="tx-wrap" data-id="${tx.id}"><div class="tx-actions"><div class="tx-act dup" onclick="dupTx(${tx.id})"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></div><div class="tx-act del" onclick="delTx(${tx.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div></div><div class="tx" onclick="editTx(${tx.id})" ontouchstart="swipeStart(event,this)" ontouchmove="swipeMove(event,this)" ontouchend="swipeEnd(event,this)"><div class="tx-ico" style="${tx.cat === 'income' ? 'background:var(--up2)' : ''}">${tx.ico}</div><div class="tx-info"><div class="tx-name">${tx.name}</div><div class="tx-cat">${tx.cat}</div></div><div class="tx-amt" style="color:${c}">${s}${amt}</div></div></div>`;
 }
 
 let swX = 0;
@@ -401,28 +427,61 @@ window.toggleSw = function (n) {
   else { sw2 = !sw2; document.getElementById('sw2').className = 'sw' + (sw2 ? '' : ' off'); }
 };
 
-window.openModal = function (desc = '', cat = 'food', amt = 0) {
+window.openModal = function (desc = '', cat = 'food', amt = 0, type = 'e') {
   selCat = cat;
+  txT = type;
+  document.getElementById('tbE').className = 'tt' + (type === 'e' ? ' exp' : '');
+  document.getElementById('tbI').className = 'tt' + (type === 'i' ? ' inc' : '');
   document.getElementById('amtN').textContent = amt ? amt.toFixed(2) : '0.00';
   const d = document.getElementById('descN');
   d.textContent = desc || 'What was this for?';
   d.style.color = desc ? 'var(--ink)' : 'var(--ink3)';
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  document.getElementById('modalDate').textContent = `${yyyy}-${mm}-${dd}`;
   document.getElementById('modal').style.display = 'flex';
   buildCats();
 };
 
-window.closeModal = function () { document.getElementById('modal').style.display = 'none'; };
+window.closeModal = function () {
+  document.getElementById('modal').style.display = 'none';
+  editingTxId = null;
+  document.getElementById('modalSaveBtn').textContent = 'Save';
+};
+
+let editingTxId = null;
+
+window.editTx = function (id) {
+  const tx = STORE.transactions.find(t => t.id === id);
+  if (!tx) return;
+  editingTxId = id;
+  const type = tx.amt >= 0 ? 'i' : 'e';
+  openModal(tx.name, tx.cat, Math.abs(tx.amt), type);
+  document.getElementById('modalSaveBtn').textContent = 'Update';
+};
 
 window.saveTx = function () {
   haptic(20);
   const amt = parseFloat(document.getElementById('amtN').textContent);
   const desc = document.getElementById('descN').textContent;
   const catObj = CATS.find(c => c.id === selCat);
+  const finalAmt = txT === 'e' ? -amt : amt;
+  const finalName = desc === 'What was this for?' ? catObj.l : desc;
+  if (editingTxId !== null) {
+    const tx = STORE.transactions.find(t => t.id === editingTxId);
+    if (tx) { tx.name = finalName; tx.cat = selCat; tx.ico = catObj.e; tx.amt = finalAmt; }
+    renderTxList();
+    closeModal();
+    showToast('Updated · ✓');
+    return;
+  }
   STORE.transactions.unshift({
     id: Date.now(),
-    name: desc === 'What was this for?' ? catObj.l : desc,
+    name: finalName,
     cat: selCat, ico: catObj.e,
-    amt: txT === 'e' ? -amt : amt,
+    amt: finalAmt,
     date: 'Today'
   });
   renderTxList();

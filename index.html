@@ -123,7 +123,7 @@
           <button class="fab-s" onclick="haptic(8);openModal()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
         </div>
       </div>
-      <div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="srch-t">Search transactions…</span></div>
+      <div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="srch-input" id="srchInput" type="text" placeholder="Search transactions…" oninput="searchTx(this.value)" /></div>
       <div class="scroll" style="padding:0 16px"><div id="txList"></div><div style="height:20px"></div></div>
     </div>
 
@@ -236,10 +236,10 @@
       <label class="flbl">Category</label>
       <div class="cat-grid" id="catG"></div>
       <label class="flbl">Date</label>
-      <div class="finput" style="color:var(--ink)">2025-03-23</div>
+      <div class="finput" id="modalDate" style="color:var(--ink)">2025-03-23</div>
       <div class="sw-r"><div><div class="sw-l">Save as Quick-Add</div><div class="sw-s">One-tap shortcut</div></div><div class="sw" id="sw1" onclick="toggleSw(1)"><div class="dot"></div></div></div>
       <div class="sw-r"><div><div class="sw-l">Recurring expense</div><div class="sw-s">Mark as regular charge</div></div><div class="sw off" id="sw2" onclick="toggleSw(2)"><div class="dot"></div></div></div>
-      <button class="btn-save" onclick="saveTx()">Save</button>
+      <button class="btn-save" id="modalSaveBtn" onclick="saveTx()">Save</button>
       <button class="btn-ghost" onclick="closeModal()">Cancel</button>
     </div>
   </div>

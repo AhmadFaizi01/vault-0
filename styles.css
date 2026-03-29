@@ -274,6 +274,8 @@ html,body{height:100%;overflow:hidden;font-family:'Poppins',sans-serif;font-weig
 .srch{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--ln);border-radius:13px;padding:10px 14px;margin:0 16px 10px;flex-shrink:0;backdrop-filter:blur(16px)}
 .srch svg{width:13px;height:13px;stroke:var(--ink3);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
 .srch-t{font-size:12px;color:var(--ink3);font-weight:300;font-family:'Poppins',sans-serif}
+.srch-input{flex:1;background:none;border:none;outline:none;font-size:12px;color:var(--ink);font-weight:300;font-family:'Poppins',sans-serif;min-width:0}
+.srch-input::placeholder{color:var(--ink3)}
 .sec{padding:0 16px;margin-bottom:18px}
 .sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
 .sec-t{font-size:7.5px;font-weight:500;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;font-family:'Poppins',sans-serif}
