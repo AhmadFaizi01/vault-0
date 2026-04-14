@@ -1,0 +1,23 @@
+{
+  "appId": "com.vault.app",
+  "appName": "Vault",
+  "webDir": "../frontend",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#04030e",
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "iosSplashResourceName": "Splash"
+    },
+    "StatusBar": {
+      "style": "Dark",
+      "backgroundColor": "#04030e",
+      "overlaysWebView": true
+    },
+    "Haptics": {}
+  }
+}
