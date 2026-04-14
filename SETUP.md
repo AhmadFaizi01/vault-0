@@ -96,7 +96,49 @@ npx cap open ios
 
 ---
 
-## 6. Deploy to production
+## 6. Build Desktop app — Windows / Mac / Linux (Tauri)
+
+Prerequisites: [Rust](https://rustup.rs) + Node.js 18+
+
+### One-time setup
+```bash
+# Install Rust (if not installed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install Tauri CLI
+cd desktop
+npm install
+```
+
+### Run in dev mode (hot-reload)
+```bash
+# Serve the frontend first
+cd frontend && npx serve -l 3000 &
+
+# Launch desktop app with dev tools
+cd desktop && npm run dev
+```
+
+### Build installers
+```bash
+cd desktop
+npm run build
+```
+
+Output goes to `desktop/src-tauri/target/release/bundle/`:
+| Platform | Output |
+|----------|--------|
+| Windows  | `nsis/Vault_1.0.0_x64-setup.exe` + `msi/Vault_1.0.0_x64.msi` |
+| macOS    | `dmg/Vault_1.0.0_x64.dmg` |
+| Linux    | `appimage/vault_1.0.0_amd64.AppImage` + `deb/vault_1.0.0_amd64.deb` |
+
+> **PWA alternative (no install required):**  
+> Visit the hosted app in Chrome or Edge → click the install icon in the address bar.  
+> The app opens like native (no browser chrome, taskbar icon, offline support).
+
+---
+
+## 7. Deploy to production
 
 ### Backend (any Linux server / Railway / Fly.io / Render)
 
